@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact, getContactsValue } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/contactsSlice';
+import { selectContactsValue } from '../../redux/selectors';
 import {
   LabelName,
   LabelNumber,
@@ -11,7 +12,7 @@ import {
 } from './ContactForm.styled';
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContactsValue);
+  const contacts = useSelector(selectContactsValue);
   const dispatch = useDispatch();
 
   const handleSubmit = e => {

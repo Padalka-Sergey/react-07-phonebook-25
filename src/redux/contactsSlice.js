@@ -1,43 +1,55 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import { contactsData } from 'data/contactsData';
+import { fetchContactsAll } from './operations';
 
-const initialState = {
-  value: contactsData,
-  //   value: [],
-};
+// import { contactsData } from 'data/contactsData';
 
-const contactsSlice = createSlice({
+// const initialState = {
+// value: contactsData,
+//   value: [],
+//   isLoading: false,
+//   error: null,
+// };
+
+export const contactsSlice = createSlice({
   name: 'contacts',
-  initialState,
-  reducers: {
-    addContact: (state, action) => {
-      //action.payload - это новый контакт
-      state.value.push(action.payload);
-    },
-    removeContact: (state, action) => {
-      //action.payload - это id
-      const index = state.value.findIndex(
-        contact => contact.id === action.payload
-      );
-      state.value.splice(index, 1);
-    },
+  initialState: {
+    value: [],
+    isLoading: false,
+    error: null,
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContactsAll.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(fetchContactsAll.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.value = action.payload;
+      })
+      .addCase(fetchContactsAll.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-const persistConfig = {
-  // key: 'root',
-  key: 'contacts',
-  storage,
-};
-
-export const contactsReducer = persistReducer(
-  persistConfig,
-  contactsSlice.reducer
-);
-
 export const { addContact, removeContact } = contactsSlice.actions;
 
-// Selectors
-export const getContactsValue = state => state.contacts.value;
+// export const contactsSlice = createSlice({
+//   name: 'contacts',
+//   initialState,
+//   reducers: {
+//     addContact: (state, action) => {
+//       //action.payload - это новый контакт
+//       state.value.push(action.payload);
+//     },
+//     removeContact: (state, action) => {
+//       //action.payload - это id
+//       const index = state.value.findIndex(
+//         contact => contact.id === action.payload
+//       );
+//       state.value.splice(index, 1);
+//     },
+//   },
+// });

@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   //   value: contactsData,
   value: '',
+  // filter: '',
 };
+
+// filter: '';
 
 export const filterSlice = createSlice({
   name: 'filter',
@@ -12,6 +15,7 @@ export const filterSlice = createSlice({
     filterContacts: (state, action) => {
       //action.payload - это e.target.value в инпуте
       state.value = action.payload;
+      // state.filter = action.payload;
     },
   },
 });
@@ -19,4 +23,4 @@ export const filterSlice = createSlice({
 export const { filterContacts } = filterSlice.actions;
 
 // Selectors
-export const getFilterValue = state => state.filter.value;
+// export const selectFilterValue = state => state.filter.value;

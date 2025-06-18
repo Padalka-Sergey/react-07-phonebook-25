@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux';
-import { getContactsValue } from '../../redux/contactsSlice';
+import { selectContactsValue } from '../../redux/selectors';
 import { ContactListItem } from 'components/ContactListItem/ContactListItem';
 
 export const ContactList = ({ children }) => {
-  const contacts = useSelector(getContactsValue);
+  const contacts = useSelector(selectContactsValue);
+  console.log(contacts);
   return (
     contacts.length > 0 && (
       <>
