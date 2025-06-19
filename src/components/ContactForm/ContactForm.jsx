@@ -1,6 +1,5 @@
-import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/operations';
 import { selectContactsValue } from '../../redux/selectors';
 import {
   LabelName,
@@ -12,7 +11,11 @@ import {
 } from './ContactForm.styled';
 
 export const ContactForm = () => {
-  const contacts = useSelector(selectContactsValue);
+  const {
+    value: contacts,
+    // isLoading,
+    // error,
+  } = useSelector(selectContactsValue);
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
@@ -28,10 +31,7 @@ export const ContactForm = () => {
       return alert(`${name.value} is already in contacts`);
     }
 
-    dispatch(
-      addContact({ id: nanoid(), name: name.value, number: number.value })
-    );
-
+    dispatch(addContact({ name: name.value, phone: number.value }));
     form.reset();
   };
 

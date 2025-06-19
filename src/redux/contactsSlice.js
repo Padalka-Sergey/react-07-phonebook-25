@@ -1,14 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContactsAll } from './operations';
-
+import { fetchContactsAll, addContact, deleteContact } from './operations';
 // import { contactsData } from 'data/contactsData';
 
-// const initialState = {
-// value: contactsData,
-//   value: [],
-//   isLoading: false,
-//   error: null,
-// };
+const handlePending = state => {
+  state.isLoading = true;
+};
+
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
 
 export const contactsSlice = createSlice({
   name: 'contacts',
@@ -19,37 +20,33 @@ export const contactsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchContactsAll.pending, state => {
-        state.isLoading = true;
-      })
+      .addCase(fetchContactsAll.pending, handlePending)
       .addCase(fetchContactsAll.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
         state.value = action.payload;
       })
-      .addCase(fetchContactsAll.rejected, (state, action) => {
+      .addCase(fetchContactsAll.rejected, handleRejected)
+      // ===================================================================
+      .addCase(addContact.pending, handlePending)
+      .addCase(addContact.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
-      });
+        state.error = null;
+        state.value.push(action.payload);
+      })
+      .addCase(addContact.rejected, handleRejected)
+      // ====================================================================
+      .addCase(deleteContact.pending, handlePending)
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.value.findIndex(
+          task => task.id === action.payload.id
+        );
+        state.value.splice(index, 1);
+      })
+      .addCase(deleteContact.rejected, handleRejected);
   },
 });
 
-export const { addContact, removeContact } = contactsSlice.actions;
-
-// export const contactsSlice = createSlice({
-//   name: 'contacts',
-//   initialState,
-//   reducers: {
-//     addContact: (state, action) => {
-//       //action.payload - это новый контакт
-//       state.value.push(action.payload);
-//     },
-//     removeContact: (state, action) => {
-//       //action.payload - это id
-//       const index = state.value.findIndex(
-//         contact => contact.id === action.payload
-//       );
-//       state.value.splice(index, 1);
-//     },
-//   },
-// });
+// export const { addContact, removeContact } = contactsSlice.actions;
