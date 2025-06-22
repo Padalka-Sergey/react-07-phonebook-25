@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/operations';
-import { selectContactsValue } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
 import {
   LabelName,
   LabelNumber,
@@ -15,7 +15,7 @@ export const ContactForm = () => {
     value: contacts,
     // isLoading,
     // error,
-  } = useSelector(selectContactsValue);
+  } = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = e => {

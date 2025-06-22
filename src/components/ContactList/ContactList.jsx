@@ -1,29 +1,22 @@
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchContactsAll } from '../../redux/operations';
-import { selectContactsValue } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
 import { ContactListItem } from 'components/ContactListItem/ContactListItem';
+import { Loader } from 'components/Loader/Loader';
+import { ContactsListBox } from './ContactList.styled';
 
 export const ContactList = ({ children }) => {
   const dispatch = useDispatch();
-  const {
-    value: contacts,
-    isLoading,
-    error,
-  } = useSelector(selectContactsValue);
+  const { value: contacts, isLoading, error } = useSelector(selectContacts);
 
   useEffect(() => {
     dispatch(fetchContactsAll());
   }, [dispatch]);
 
   return (
-    <>
-      {isLoading && (
-        <p>
-          <b>LOADING....</b>
-        </p>
-      )}
+    <ContactsListBox>
+      {isLoading && <Loader />}
       {error && (
         <p>
           <b>{error}</b>
@@ -37,6 +30,6 @@ export const ContactList = ({ children }) => {
           </ul>
         </>
       )}
-    </>
+    </ContactsListBox>
   );
 };
