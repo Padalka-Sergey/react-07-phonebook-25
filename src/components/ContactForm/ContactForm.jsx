@@ -11,11 +11,7 @@ import {
 } from './ContactForm.styled';
 
 export const ContactForm = () => {
-  const {
-    value: contacts,
-    // isLoading,
-    // error,
-  } = useSelector(selectContacts);
+  const { value: contacts } = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
